@@ -96,8 +96,8 @@
 		<table id='${img.id}' class='main-table'>
 			<thead>
 				<tr>
-					<th>Class Type</th>
-					<th>Confidence</th>
+					<th>Class Type<i></i></th>
+					<th>Confidence<i></i></th>
 				</tr>
 			</thead>
 			<tbody>
