@@ -28,7 +28,6 @@ import util.WatsonNaturalLanguage;
  */
 @WebServlet("/Example2")
 public class Example2 extends HttpServlet {
-	private static Document doc;
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -39,36 +38,38 @@ public class Example2 extends HttpServlet {
 		String sub = request.getParameter("sub");
 		String maxStr = request.getParameter("max");
 		int max = 5;
-		
+
 		if (maxStr != null && !maxStr.isEmpty()) {
 			max = Integer.parseInt(maxStr);
 		}
-		
+
 		if (sub != null && !sub.isEmpty()) {
 			try {
-				if (doc == null) {
-					URL url = new URL("http://inline-reddit.com/feed/?subreddit="+sub);
-					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-					conn.setRequestProperty("User-Agent", "Watson-News-Scraper 0.1");
-					InputStream is = conn.getInputStream();
+				URL url = new URL("http://inline-reddit.com/feed/?subreddit=" + sub);
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestProperty("User-Agent", "Watson-News-Scraper 0.1");
+				InputStream is = conn.getInputStream();
 
-					DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
-					doc = dbFactory.newDocumentBuilder().parse(is);
-				}
+				Document doc = dbFactory.newDocumentBuilder().parse(is);
 
 				NodeList nodes = doc.getElementsByTagName("item");
+				
 				ArrayList<RedditPost> posts = new ArrayList<RedditPost>();
+				
 				for (int i = 0; i < max && i < nodes.getLength(); i++) {
 					Node node = nodes.item(i);
 					RedditPost post = RedditPost.parse(node);
 					posts.add(post);
 				}
+				
 				WatsonNaturalLanguage wnl = new WatsonNaturalLanguage();
+				
 				for (int i = 0; i < posts.size(); i++) {
 					wnl.analyzeRedditPost(posts.get(i));
 				}
-				
+
 				request.setAttribute("posts", posts);
 
 			} catch (SAXException | ParserConfigurationException e) {
