@@ -1,22 +1,29 @@
 package util;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImage;
 
 
 public class RedditPost {
+	private int id;
 	private String title;
 	private String link;
 	private AnalysisResults analysis;
 	private ClassifiedImage image;
-	
-	public RedditPost(String title, String link) {
+
+	public RedditPost(int id, String title, String link) {
 		super();
+		this.id = id;
 		this.title = title;
 		this.link = link;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

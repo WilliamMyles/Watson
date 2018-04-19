@@ -76,10 +76,9 @@ public class Example2 extends HttpServlet {
 							link = currNode.getTextContent();;
 						}
 					}
-					RedditPost post = new RedditPost(title, link);
-					System.out.println(link.substring(link.length()-5));
-					System.out.println((link.substring(link.length() - 5).matches(".{1,}\\.(png|gif|jpg|jpeg)")));
-					if (link.substring(link.length() - 5).matches(".{1,}\\.(png|gif|jpg|jpeg)")) {
+					RedditPost post = new RedditPost(i, title, link);
+					
+					if (link.substring(link.length() - 6).matches(".{1,}\\.(png|gif|jpg|jpeg)")) {
 						imgPosts.add(post);
 					} else {
 						textPosts.add(post);						
