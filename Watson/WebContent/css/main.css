@@ -1,0 +1,93 @@
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	background-color: #f0f0f0;
+	position: relative;
+	margin: 0;
+	height: 100%;
+	overflow-y: scroll;
+}
+
+hr {
+	margin: 0;
+	border: 1px solid #3B3B3B;
+}
+
+.main-table {
+	text-align: left;
+	border-collapse: collapse;
+	width: 100%;
+}
+.controls {
+	margin: 10px;
+}
+.table-div {
+	margin-left: 10px;
+	margin-right: 10px;
+	float: left;
+	width: calc(70vw - 25px);
+}
+
+td {
+	padding: 10px;
+	height: 32px;
+}
+
+th {
+	
+	border-right: 1px solid #3B3B3B;
+	text-align: center;
+	background-color: #980000;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	color: #ffffff;
+	font-size: 1em;
+	font-weight: normal;
+	cursor: pointer;
+}
+th:hover {
+	background-color: #a50000;
+}
+
+
+i {
+	border-color:#f0f0f0;
+	color: #f0f0f0;
+	margin-left: 5px;
+	margin-bottom: 1px;
+    border: solid;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.headerSortUp i {
+    transform: rotate(-135deg) !important;
+    -webkit-transform: rotate(-135deg) !important;
+}
+
+.headerSortDown i {
+    transform: rotate(45deg) !important;
+    -webkit-transform: rotate(45deg) !important;
+}
+
+.headerSortUp, .headerSortDown {
+	background-color: #a50000;
+}
+
+
+.header i {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+table tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.table-row:hover {
+	background-color: #D4D4D4;
+}

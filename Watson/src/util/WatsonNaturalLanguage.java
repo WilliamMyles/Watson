@@ -1,48 +1,64 @@
 package util;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.ArrayList;
 
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalyzeOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.CategoriesOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.EmotionOptions;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.EntitiesOptions;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Features;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.KeywordsOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.SemanticRolesOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.SentimentOptions;
 
 
 public class WatsonNaturalLanguage {
-	private static final String CRED_LOC = "../../keys/NLcred.txt";
 
 	private NaturalLanguageUnderstanding service;
 
 	public WatsonNaturalLanguage() {
-		try {
-			BufferedReader credReader = new BufferedReader(new FileReader(this.getClass().getClassLoader()
-					.getResource(CRED_LOC).getPath()));
+			service = new NaturalLanguageUnderstanding("2018-03-16", "cf238d29-507c-499d-a5f7-b2c784ac351b", "3l7asSKHyTcz");
 
-			String username = credReader.readLine().trim();
-			String pass = credReader.readLine().trim();
+	}
+	
+	public String analyzeText(String text) {
 
-			credReader.close();
+		CategoriesOptions categories = new CategoriesOptions();
+		
+		ArrayList<String> targets = new ArrayList<>();
+		targets.add("desert");
+		targets.add("treasure ");
+		EmotionOptions emotion = new EmotionOptions.Builder().targets(targets).build();
+		
+		EntitiesOptions entitiesOptions = new EntitiesOptions.Builder().emotion(true).sentiment(true).limit(2).build();
+		KeywordsOptions keywordsOptions = new KeywordsOptions.Builder().emotion(true).sentiment(true).limit(2).build();
+		SemanticRolesOptions semanticRoles = new SemanticRolesOptions.Builder().build();
+		SentimentOptions sentiment = new SentimentOptions.Builder().targets(targets).build();
 
-			service = new NaturalLanguageUnderstanding("2018-03-16", username, pass);
+		Features features = new Features.Builder()
+				.categories(categories)
+				.emotion(emotion)
+				.entities(entitiesOptions)
+				.keywords(keywordsOptions)
+				.semanticRoles(semanticRoles)
+				.sentiment(sentiment).build();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		AnalyzeOptions parameters = new AnalyzeOptions.Builder().text(text).features(features).build();		
+		AnalysisResults response = service.analyze(parameters).execute();
+		return response.toString();
 	}
 
-	public AnalysisResults analyzeTextEntities(String text, int entNum) {
-		EntitiesOptions entitiesOptions = new EntitiesOptions.Builder().emotion(true).sentiment(true).limit(entNum)
-				.build();
-		
-		Features features = new Features.Builder().entities(entitiesOptions).build();
-		
-		AnalyzeOptions parameters = new AnalyzeOptions.Builder().text(text).features(features).build();
+	public void analyzeRedditPost(RedditPost post) {
 
-		AnalysisResults response = service.analyze(parameters).execute();
+		EmotionOptions emotion = new EmotionOptions.Builder().document(true).build();
+		SentimentOptions sentiment = new SentimentOptions.Builder().document(true).build();
 
-		return response;
+		Features features = new Features.Builder().emotion(emotion).sentiment(sentiment).build();
+				
+		AnalyzeOptions parameters = new AnalyzeOptions.Builder().url(post.getLink()).features(features).build();
+		
+		post.setAnalysis(service.analyze(parameters).execute());
 	}
 }
