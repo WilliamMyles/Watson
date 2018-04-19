@@ -43,7 +43,6 @@
 			<c:if test='${param.anger != null}'><th>Anger<i></i></th></c:if>
 			<c:if test='${param.sadness != null}'><th>Sadness<i></i></th></c:if>
 			<c:if test='${param.sentiment != null}'><th>Overall Sentiment<i></i></th></c:if>
-			
 		</tr>
 		</thead>
 		<tbody>
@@ -60,6 +59,12 @@
 		</c:forEach>
 		</tbody>
 	</table>
-	</div>
+</div>
+<div id='photoTable' class='main-table'>
+
+	<c:forEach items="${imgPosts}" var="img">
+		<c:out value='${img.image.classifiers[0].classes[0].className} + ${img.image.classifiers[0].classes[0].score}' />
+	</c:forEach>
+</div>
 </body>
 </html>

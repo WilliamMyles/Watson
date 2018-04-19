@@ -19,8 +19,7 @@ public class WatsonNaturalLanguage {
 	private NaturalLanguageUnderstanding service;
 
 	public WatsonNaturalLanguage() {
-			service = new NaturalLanguageUnderstanding("2018-03-16", "cf238d29-507c-499d-a5f7-b2c784ac351b", "3l7asSKHyTcz");
-
+		service = new NaturalLanguageUnderstanding("2018-03-16", "cf238d29-507c-499d-a5f7-b2c784ac351b", "3l7asSKHyTcz");
 	}
 	
 	public String analyzeText(String text) {

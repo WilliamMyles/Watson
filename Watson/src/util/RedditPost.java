@@ -4,13 +4,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
+import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImage;
 
 
 public class RedditPost {
 	private String title;
 	private String link;
 	private AnalysisResults analysis;
-
+	private ClassifiedImage image;
+	
 	public RedditPost(String title, String link) {
 		super();
 		this.title = title;
@@ -41,20 +43,12 @@ public class RedditPost {
 		this.analysis = analysis;
 	}
 
-	public static RedditPost parse(Node node) {
-		String title = null;
-		String link = null;
+	public ClassifiedImage getImage() {
+		return image;
+	}
 
-		NodeList nodes = node.getChildNodes();
-		for (int i = 0; i < nodes.getLength(); i++) {
-			Node currNode = nodes.item(i);
-			if (currNode.getNodeName().equals("title")) {
-				title = currNode.getTextContent();
-			} else if (currNode.getNodeName().equals("link")) {
-				link = currNode.getTextContent();;
-			}
-		}
-		return new RedditPost(title, link);
+	public void setImage(ClassifiedImage image) {
+		this.image = image;
 	}
 
 	@Override

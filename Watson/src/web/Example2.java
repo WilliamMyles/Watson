@@ -20,6 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import util.RedditPost;
+import util.WatsonImageProcessing;
 import util.WatsonNaturalLanguage;
 
 
@@ -56,22 +57,49 @@ public class Example2 extends HttpServlet {
 
 				NodeList nodes = doc.getElementsByTagName("item");
 				
-				ArrayList<RedditPost> posts = new ArrayList<RedditPost>();
+				ArrayList<RedditPost> textPosts = new ArrayList<RedditPost>();
+				ArrayList<RedditPost> imgPosts = new ArrayList<RedditPost>();
 				
 				for (int i = 0; i < max && i < nodes.getLength(); i++) {
 					Node node = nodes.item(i);
-					RedditPost post = RedditPost.parse(node);
-					posts.add(post);
+					String title = null;
+					String link = null;
+
+					NodeList postChildNodes = node.getChildNodes();
+					
+					for (int j = 0; j < postChildNodes.getLength(); j++) {
+						Node currNode = postChildNodes.item(j);
+						if (currNode.getNodeName().equals("title")) {
+							title = currNode.getTextContent();
+						} else if (currNode.getNodeName().equals("link")) {
+							
+							link = currNode.getTextContent();;
+						}
+					}
+					RedditPost post = new RedditPost(title, link);
+					System.out.println(link.substring(link.length()-5));
+					System.out.println((link.substring(link.length() - 5).matches(".{1,}\\.(png|gif|jpg|jpeg)")));
+					if (link.substring(link.length() - 5).matches(".{1,}\\.(png|gif|jpg|jpeg)")) {
+						imgPosts.add(post);
+					} else {
+						textPosts.add(post);						
+					}
 				}
 				
 				WatsonNaturalLanguage wnl = new WatsonNaturalLanguage();
 				
-				for (int i = 0; i < posts.size(); i++) {
-					wnl.analyzeRedditPost(posts.get(i));
+				for (int i = 0; i < textPosts.size(); i++) {
+					wnl.analyzeRedditPost(textPosts.get(i));
 				}
-
-				request.setAttribute("posts", posts);
-
+				request.setAttribute("posts", textPosts);
+				
+				WatsonImageProcessing wip = new WatsonImageProcessing();
+				
+				for (int i = 0; i < imgPosts.size(); i++) {
+					wip.analyseRedditPost(imgPosts.get(i));
+				}
+				request.setAttribute("imgPosts", imgPosts);
+				
 			} catch (SAXException | ParserConfigurationException e) {
 				e.printStackTrace();
 			}
