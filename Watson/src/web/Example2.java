@@ -78,8 +78,10 @@ public class Example2 extends HttpServlet {
 					}
 					RedditPost post = new RedditPost(i, title, link);
 					
-					if (link.substring(link.length() - 6).matches(".{1,}\\.(png|gif|jpg|jpeg)")) {
+					if (link.substring(link.length() - 6).matches(".{1,}\\.(png|jpg|jpeg)")) {
 						imgPosts.add(post);
+					} else if (link.substring(link.length() - 6).matches(".{1,}\\.(gif|gfy)")) {
+						// NO OP
 					} else {
 						textPosts.add(post);						
 					}

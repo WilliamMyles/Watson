@@ -19,11 +19,11 @@ public class WatsonNaturalLanguage {
 	private NaturalLanguageUnderstanding service;
 
 	public WatsonNaturalLanguage() {
-		service = new NaturalLanguageUnderstanding("2018-03-16", "cf238d29-507c-499d-a5f7-b2c784ac351b", "3l7asSKHyTcz");
+		service = new NaturalLanguageUnderstanding("2018-03-16", "<USERNAME>", "<PASSWORD>");
 	}
 	
 	public String analyzeText(String text) {
-
+		
 		CategoriesOptions categories = new CategoriesOptions();
 		
 		ArrayList<String> targets = new ArrayList<>();
@@ -43,8 +43,13 @@ public class WatsonNaturalLanguage {
 				.keywords(keywordsOptions)
 				.semanticRoles(semanticRoles)
 				.sentiment(sentiment).build();
-
-		AnalyzeOptions parameters = new AnalyzeOptions.Builder().text(text).features(features).build();		
+		AnalyzeOptions parameters;
+	
+		parameters =  new AnalyzeOptions.Builder().text(text).features(features).build();
+		
+//		if (url) parameters = new AnalyzeOptions.Builder().url(text).features(features).build();		
+//		else parameters =  new AnalyzeOptions.Builder().text(text).features(features).build();	
+		
 		AnalysisResults response = service.analyze(parameters).execute();
 		return response.toString();
 	}
